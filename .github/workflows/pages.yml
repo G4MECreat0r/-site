@@ -1,0 +1,50 @@
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build enrollment profile
+        env:
+          ORG_NAME: ${{ vars.ORG_NAME }}
+          MDM_SERVER_URL: ${{ vars.MDM_SERVER_URL }}
+          TOPIC: ${{ vars.TOPIC }}
+          SCEP_CHALLENGE: ${{ secrets.SCEP_CHALLENGE }}
+          ENROLL_URL: ${{ vars.ENROLL_URL }}
+          OUTPUT: site/enroll/enrollment.mobileconfig
+        run: |
+          python scripts/build-profile.py
+          pip install "qrcode[pil]"
+          python scripts/enroll-qr.py "$ENROLL_URL" site/assets/enroll-qr.png
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+    steps:
+      - uses: actions/deploy-pages@v4
