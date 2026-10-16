@@ -1,0 +1,19 @@
+services:
+  mdm:
+    build: ./mdm
+    env_file: .env
+    ports: ["9000:9000"]
+    volumes:
+      - mdm-data:/var/db/micromdm
+      - ./certs:/certs:ro
+
+  api:
+    build: ./api
+    env_file: .env
+    environment:
+      MICROMDM_URL: http://mdm:9000
+    ports: ["8000:8000"]
+    depends_on: [mdm]
+
+volumes:
+  mdm-data:
