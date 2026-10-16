@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: mdm
+    runtime: docker
+    dockerfilePath: ./server/mdm/Dockerfile
+    healthCheckPath: /healthz
+    disk:
+      name: mdm-data
+      mountPath: /var/db/micromdm
+      sizeGB: 1
+    envVars:
+      - key: SERVER_URL
+        sync: false
+      - key: APNS_PUSH_CERT
+        sync: false
+      - key: APNS_PUSH_KEY
+        sync: false
+      - key: MICROMDM_API_KEY
+        generateValue: true
+
+  - type: web
+    name: api
+    runtime: docker
+    dockerfilePath: ./server/api/Dockerfile
+    healthCheckPath: /healthz
+    envVars:
+      - key: MICROMDM_URL
+        value: https://mdm.onrender.com
+      - key: MICROMDM_API_KEY
+        sync: false
+      - key: DASHBOARD_TOKEN
+        sync: false
+      - key: CORS_ORIGIN
+        value: https://<user>.github.io
