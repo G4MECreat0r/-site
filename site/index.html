@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Device Enrollment</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body>
+<main>
+  <h1>端末を登録する</h1>
+  <p class="lead">プロファイルを入れると、管理サーバーから位置情報を取得できるようになります。</p>
+
+  <section class="card">
+    <h2>1. プロファイルをインストール</h2>
+    <p>Safari で開いてください。設定アプリ →「プロファイルがダウンロードされました」→ インストール → 信頼。</p>
+    <p>
+      <a class="btn" href="enroll/enrollment.mobileconfig">プロファイルをダウンロード</a>
+    </p>
+    <img class="qr" src="assets/enroll-qr.png" alt="enrollment QR">
+  </section>
+
+  <section class="card">
+    <h2>2. 取得状況</h2>
+    <p class="muted">トークンは <code>config.js</code> の <code>MDM_TOKEN</code> で設定します。</p>
+    <button id="refresh" class="btn">更新</button>
+    <div id="map"></div>
+    <table id="list"><thead><tr><th>UDID</th><th>緯度</th><th>経度</th><th>精度</th><th>取得時刻</th><th></th></tr></thead><tbody></tbody></table>
+  </section>
+</main>
+
+<script src="config.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
