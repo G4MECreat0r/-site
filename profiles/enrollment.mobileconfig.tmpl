@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>PayloadContent</key>
+  <array>
+
+    <!-- SCEP: 端末のクライアント証明書を発行 -->
+    <dict>
+      <key>PayloadType</key><string>com.apple.security.scep</string>
+      <key>PayloadVersion</key><integer>1</integer>
+      <key>PayloadIdentifier</key><string>{{IDENTIFIER_PREFIX}}.scep</string>
+      <key>PayloadUUID</key><string>{{SCEP_UUID}}</string>
+      <key>PayloadDisplayName</key><string>SCEP</string>
+      <key>PayloadDescription</key><string>Device identity</string>
+      <key>PayloadContent</key>
+      <dict>
+        <key>URL</key><string>{{SCEP_URL}}</string>
+        <key>Name</key><string>{{ORG_NAME}}</string>
+        <key>Subject</key>
+        <array>
+          <array><key>CN</key><string>$UDID</string></array>
+          <array><key>O</key><string>{{ORG_NAME}}</string></array>
+        </array>
+        <key>Challenge</key><string>{{SCEP_CHALLENGE}}</string>
+        <key>Keysize</key><integer>2048</integer>
+        <key>KeyType</key><string>RSA</string>
+        <key>KeyUsage</key><integer>5</integer>
+      </dict>
+    </dict>
+
+    <!-- MDM: サーバーへ登録 -->
+    <dict>
+      <key>PayloadType</key><string>com.apple.mdm</string>
+      <key>PayloadVersion</key><integer>1</integer>
+      <key>PayloadIdentifier</key><string>{{IDENTIFIER_PREFIX}}.mdm</string>
+      <key>PayloadUUID</key><string>{{MDM_UUID}}</string>
+      <key>PayloadDisplayName</key><string>MDM</string>
+      <key>PayloadDescription</key><string>Device management</string>
+      <key>IdentityCertificateUUID</key><string>{{SCEP_UUID}}</string>
+      <key>ServerURL</key><string>{{MDM_URL}}/mdm</string>
+      <key>CheckInURL</key><string>{{MDM_URL}}/checkin</string>
+      <key>Topic</key><string>{{TOPIC}}</string>
+      <key>SignMessage</key><true/>
+      <key>CheckOutWhenRemoved</key><true/>
+      <key>UseDevelopmentAPNS</key><false/>
+      <key>ServerCapabilities</key>
+      <array>
+        <string>com.apple.mdm.per-user-connections</string>
+        <string>com.apple.mdm.bootstraptoken</string>
+      </array>
+    </dict>
+
+  </array>
+
+  <key>PayloadType</key><string>Configuration</string>
+  <key>PayloadVersion</key><integer>1</integer>
+  <key>PayloadIdentifier</key><string>{{IDENTIFIER_PREFIX}}</string>
+  <key>PayloadUUID</key><string>{{PROFILE_UUID}}</string>
+  <key>PayloadDisplayName</key><string>{{PROFILE_NAME}}</string>
+  <key>PayloadDescription</key><string>{{PROFILE_DESCRIPTION}}</string>
+  <key>PayloadOrganization</key><string>{{ORG_NAME}}</string>
+  <key>PayloadRemovalDisallowed</key><false/>
+</dict>
+</plist>
