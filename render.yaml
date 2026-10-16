@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: mdm
+    runtime: docker
+    plan: starter            # 永続ディスクに必要。無料は disk 不可
+    dockerfilePath: ./server/mdm/Dockerfile
+    dockerContext: ./server/mdm
+    healthCheckPath: /healthz
+    disk:
+      name: mdm-data
+      mountPath: /var/db/micromdm
+      sizeGB: 1
+    envVars:
+      - key: MICROMDM_SERVER_URL
+        sync: false
+      - key: MICROMDM_API_KEY
+        generateValue: true
+      - key: SCEP_CHALLENGE
+        sync: false
+      - key: APNS_CERT_B64
+        sync: false
+      - key: APNS_KEY_B64
+        sync: false
+
+  - type: web
+    name: mdm-api
+    runtime: docker
+    plan: starter
+    dockerfilePath: ./server/api/Dockerfile
+    dockerContext: ./server/api
+    healthCheckPath: /healthz
+    envVars:
+      - key: MICROMDM_URL
+        sync: false
+      - key: MICROMDM_API_KEY
+        sync: false
+      - key: DASHBOARD_TOKEN
+        generateValue: true
+      - key: CORS_ORIGIN
+        sync: false
