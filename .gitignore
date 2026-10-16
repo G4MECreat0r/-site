@@ -1,0 +1,15 @@
+# 秘密情報
+mdm-certificates/
+*.pem
+*.key
+server/.env
+server/certs/
+
+# 生成物
+site/enroll/enrollment.mobileconfig
+site/assets/enroll-qr.png
+
+# Python
+__pycache__/
+*.pyc
+.venv/
